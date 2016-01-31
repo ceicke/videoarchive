@@ -1,0 +1,23 @@
+%h2.ui.header
+  %i.film.icon
+  .content
+    Videos
+    .sub.header Your personal video archive
+
+%table.ui.celled.table
+  %thead
+    %tr
+      %th Description
+      %th Start
+      %th End
+      %th{:colspan => "3"}
+  %tbody
+    - @movies.each do |movie|
+      %tr
+        %td= movie.description
+        %td= movie.start
+        %td= movie.end
+        %td= link_to 'Show', movie
+        %td= link_to 'Edit', edit_movie_path(movie)
+        %td= link_to 'Destroy', movie, method: :delete, data: { confirm: 'Are you sure?' }
+

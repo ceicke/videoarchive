@@ -1,0 +1,13 @@
+%p#notice= notice
+%p
+  %strong Description:
+  = @movie.description
+%p
+  %strong Start:
+  = @movie.start
+%p
+  %strong End:
+  = @movie.end
+= link_to 'Edit', edit_movie_path(@movie)
+|
+= link_to 'Back', movies_path
