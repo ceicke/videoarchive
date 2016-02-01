@@ -20,7 +20,11 @@ gem 'haml-rails'
 # Semantic UI as CSS framework
 gem 'semantic-ui-sass', github: 'doabit/semantic-ui-sass'
 
+# Our video player
 gem 'videojs_rails'
+
+# storage in S3
+gem 'aws-sdk'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'

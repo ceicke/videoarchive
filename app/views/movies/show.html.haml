@@ -1,4 +1,6 @@
-%p#notice= notice
+%video#videoplayer.video-js.vjs-default-skin{controls: true, preload: 'auto', width: '100%', height: 'auto'}
+  %source{src: "#{@movie.public_url}", type: "#{@movie.content_type}"}
+
 %p
   %strong Description:
   = @movie.description
@@ -8,6 +10,19 @@
 %p
   %strong End:
   = @movie.end
+
+%p
+  %strong Filesize:
+  = number_to_human_size(@movie.filesize)
+
+%p
+  %strong URL:
+  = @movie.public_url
+
+%p
+  %strong Content-Type:
+  = @movie.content_type
+
 = link_to 'Edit', edit_movie_path(@movie)
 |
 = link_to 'Back', movies_path

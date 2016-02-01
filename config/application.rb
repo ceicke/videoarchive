@@ -22,5 +22,7 @@ module Videoarchive
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+
+    config.fetch_directory = Rails.root.join('tmp', 'videos_to_fetch').to_s
   end
 end

@@ -14,6 +14,7 @@
 ActiveRecord::Schema.define(version: 20160131124437) do
 
   create_table "movies", force: :cascade do |t|
+    t.string   "filename",    null: false
     t.text     "description"
     t.datetime "start"
     t.datetime "end"
