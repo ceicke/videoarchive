@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  movie_id: 
+  offset: 1
+  description: MyText
+  date: 2016-02-02
+
+two:
+  movie_id: 
+  offset: 1
+  description: MyText
+  date: 2016-02-02

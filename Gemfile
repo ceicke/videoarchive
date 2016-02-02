@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.5.1'
 # Use sqlite3 as the database for Active Record
@@ -25,6 +24,9 @@ gem 'videojs_rails'
 
 # storage in S3
 gem 'aws-sdk'
+
+# moment JS for date handling in JavaScript
+gem 'momentjs-rails'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -57,3 +59,7 @@ group :development do
   gem 'spring'
 end
 
+source 'https://rails-assets.org' do
+  # datepicker from jquery
+  gem 'rails-assets-jquery-date-range-picker'
+end

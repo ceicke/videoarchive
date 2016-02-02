@@ -1,0 +1,11 @@
+.item.chapter{data: {offset: chapter.offset}}
+  .ui.tiny.image
+    = image_tag 'http://semantic-ui.com/images/wireframe/image.png'
+  .ui.content
+    .header
+      .ui.label
+        = format_offset_seconds chapter.offset
+    .description
+      = chapter.description
+    - if chapter.date.present?
+      .extra= l chapter.date

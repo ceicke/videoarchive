@@ -15,4 +15,7 @@
 //= require turbolinks
 //= require semantic-ui
 //= require video
+//= require moment
+//= require moment/de.js
+//= require jquery-date-range-picker
 //= require_tree .

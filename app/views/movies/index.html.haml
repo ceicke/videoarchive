@@ -2,21 +2,23 @@
   %i.film.icon
   .content
     Videos
-    .sub.header Family video archive
+    .sub.header Familienvideos
 
-%table.ui.celled.table
-  %thead
-    %tr
-      %th Description
-      %th Start
-      %th End
-      %th{:colspan => "3"}
-  %tbody
-    - @movies.each do |movie|
-      %tr
-        %td= movie.description
-        %td= movie.start
-        %td= movie.end
-        %td= link_to 'Show', movie
-        %td= link_to 'Edit', edit_movie_path(movie)
-        %td= link_to 'Destroy', movie, method: :delete, data: { confirm: 'Are you sure?' }
+.ui.items
+  - @movies.each do |movie|
+    .item
+      .image
+        = image_tag 'http://semantic-ui.com/images/wireframe/image.png'
+        .extra
+          = link_to movie do
+            .ui.label Öffnen
+          = link_to edit_movie_path(movie) do
+            .ui.label Bearbeiten
+      .content
+        .header
+          = number_to_human_size movie.filesize
+        .meta
+          = l movie.created_at
+        .description
+          .ui.list
+            = render partial: 'small_chapter', collection: movie.chapters, as: :chapter

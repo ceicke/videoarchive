@@ -1,5 +1,120 @@
-%h1 Editing Movie
-= render 'form'
-= link_to 'Show', @movie
-|
-= link_to 'Back', movies_path
+%h2.ui.header
+  %i.film.icon
+  .content
+    Video
+
+%video.video-js.vjs-default-skin#player{controls: true, preload: 'auto', width: '640', height: '264'}
+
+%button.fluid.ui.blue.basic.button#mark
+  Neuer Abschnitt
+
+#chapterarea
+
+.ui.form.chapter#template
+  %input{type: 'hidden', name: 'mark-id', class: 'mark-id-input'}
+  %input{type: 'hidden', name: 'offset', class: 'offset-input'}
+  .inline.fields
+    .ten.wide.field
+      .ui.large.label.time 2:03
+      %input{type: 'text', placeholder: 'Was passiert?', name: 'description', class: 'description-input'}
+    .six.wide.field
+      %input{type: 'text', placeholder: 'Datum', name: 'date', class: 'date-input'}
+      .ui.red.icon.button.delete-button
+        %i.delete.icon
+      .ui.green.icon.button.save-button
+        %i.checkmark.icon
+
+:coffeescript
+  $(document).ready () ->
+
+    $('#template').hide()
+
+    movie_id = "#{@movie.id}"
+    player = null
+    aspectRatio = 264/640
+
+    secondsTimeSpanToHMS = (s) ->
+      h = Math.floor(s / 3600)
+      s -= h * 3600
+      m = Math.floor(s / 60)
+      s -= m * 60
+      h + ':' + (if m < 10 then '0' + m else m) + ':' + (if s < 10 then '0' + s else s)
+
+    saveMark = (description, date, offset, chapter) ->
+      $.post("/movies/#{@movie.id}/chapters.json",
+        chapter:
+          description: description,
+          date: date,
+          offset: offset,
+          movie_id: movie_id
+      ).done (data) ->
+        chapter.find('.mark-id-input').val(data['id'])
+
+    updateMark = (id, description, date, offset) ->
+      $.ajax(
+        type: 'PATCH',
+        url: "/movies/#{@movie.id}/chapters/" + id + ".json",
+        data:
+          chapter:
+            description: description,
+            date: date
+      )
+
+    deleteMark = (id) ->
+      $.ajax(
+        type: 'DELETE',
+        url: "/movies/#{@movie.id}/chapters/" + id + ".json"
+      )
+
+    videojs('player').ready () ->
+      player = this
+      player.src({ type: "#{@movie.content_type}", src: "#{@movie.public_url}" })
+
+      resizeVideoJS = () ->
+        width = document.getElementById('player').parentElement.offsetWidth
+        player.width(width).height( width * aspectRatio )
+
+      resizeVideoJS()
+      window.onresize = resizeVideoJS
+
+    $('#mark').on('click', () ->
+      currentTime = player.currentTime()
+      template = $('#template')
+      newChapter = template.clone()
+      newChapter.removeAttr('id')
+      newChapter.find('.time')[0].innerHTML = secondsTimeSpanToHMS(Math.round(currentTime))
+      newChapter.find('.offset-input').val(Math.round(currentTime))
+      newChapter.find('.mark-id-input').val('0')
+      newChapter.find('.description-input').val('')
+
+      newChapter.prependTo('#chapterarea').show()
+      newChapter.find('.description-input').focus()
+
+      saveButton = newChapter.find('.save-button')
+      saveButton.on('click', () ->
+        description = newChapter.find('.description-input').val()
+        date = newChapter.find('.date-input').val()
+        offset = newChapter.find('.offset-input').val()
+        markId = newChapter.find('.mark-id-input').val()
+        if markId == '0'
+          saveMark(description, date, offset, newChapter)
+        else
+          updateMark(markId, description, date, offset)
+      )
+      deleteButton = newChapter.find('.delete-button')
+      deleteButton.on('click', () ->
+        markId = newChapter.find('.mark-id-input').val()
+        if markId != '0'
+          deleteMark(markId)
+        newChapter.hide()
+      )
+
+      dateInput = newChapter.find('.date-input')
+      dateInput.dateRangePicker
+        singleDate: true,
+        startOfWeek: 'monday',
+        autoClose: true,
+        format: 'DD.MM.YYYY'
+
+
+    )

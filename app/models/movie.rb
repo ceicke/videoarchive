@@ -1,5 +1,7 @@
 class Movie < ActiveRecord::Base
 
+  has_many :chapters, dependent: :destroy
+
   validates :filename, presence: true
 
   def filesize

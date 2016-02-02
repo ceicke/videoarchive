@@ -1,0 +1,7 @@
+.item
+  %i.folder.icon
+  .ui.content
+    .description
+      - if chapter.date.present?
+        = "(#{l chapter.date})"
+      = chapter.description

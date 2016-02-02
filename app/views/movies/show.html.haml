@@ -1,28 +1,33 @@
-%video#videoplayer.video-js.vjs-default-skin{controls: true, preload: 'auto', width: '100%', height: 'auto'}
-  %source{src: "#{@movie.public_url}", type: "#{@movie.content_type}"}
+%h2.ui.header
+  %i.film.icon
+  .content
+    Video
 
-%p
-  %strong Description:
-  = @movie.description
-%p
-  %strong Start:
-  = @movie.start
-%p
-  %strong End:
-  = @movie.end
+%video.video-js.vjs-default-skin#player{controls: true, preload: 'auto', width: '640', height: '264'}
 
-%p
-  %strong Filesize:
-  = number_to_human_size(@movie.filesize)
+.ui.divided.items
+  = render partial: 'chapter', collection: @movie.chapters
 
-%p
-  %strong URL:
-  = @movie.public_url
+:coffeescript
+  $(document).ready () ->
 
-%p
-  %strong Content-Type:
-  = @movie.content_type
+    player = null
+    aspectRatio = 264/640
 
-= link_to 'Edit', edit_movie_path(@movie)
-|
-= link_to 'Back', movies_path
+    videojs('player').ready () ->
+      player = this
+      player.src({ type: "#{@movie.content_type}", src: "#{@movie.public_url}" })
+
+      resizeVideoJS = () ->
+        width = document.getElementById('player').parentElement.offsetWidth
+        player.width(width).height( width * aspectRatio )
+
+      resizeVideoJS()
+      window.onresize = resizeVideoJS
+
+    $('.chapter').on('click', () ->
+      chapter = $(this)
+      offset = chapter.data('offset')
+      player.currentTime(offset)
+      player.play()
+    )
