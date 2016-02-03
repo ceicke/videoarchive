@@ -86,7 +86,7 @@ class Movie < ActiveRecord::Base
   end
 
   def delete_thumbnail
-    system("rm #{thumbnail_filename}")
+    system("rm #{Rails.root.join('tmp').to_s + '/' + thumbnail_filename}")
   end
 
   def create_thumbnails
