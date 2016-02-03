@@ -17,6 +17,7 @@
     videojs('player').ready () ->
       player = this
       player.src({ type: "#{@movie.content_type}", src: "#{@movie.public_url}" })
+      player.poster("#{@movie.thumbnail_public_url}")
 
       resizeVideoJS = () ->
         width = document.getElementById('player').parentElement.offsetWidth
