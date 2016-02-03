@@ -29,7 +29,7 @@ class Movie < ActiveRecord::Base
     chapters.each do |c|
       c.generate_thumbnail(temp_filename)
       c.upload_thumbnail
-      c.update_attribute(:thumbnail_ready, true)
+      c.update_column(:thumbnail_ready, true)
     end
   end
 
@@ -40,7 +40,7 @@ class Movie < ActiveRecord::Base
     system("montage -mode concatenate -geometry 600x -tile #{tiling} #{filelist} -auto-orient #{Rails.root.join('tmp').to_s + '/' + thumbnail_filename}")
 
     thumbnail_aws_object.upload_file(Rails.root.join('tmp').to_s + '/' + thumbnail_filename, acl: 'public-read', content_type: 'image/jpg')
-    update_attribute(:thumbnail_ready, true)
+    update_column(:thumbnail_ready, true)
   end
 
   def delete_tempfiles
@@ -51,7 +51,7 @@ class Movie < ActiveRecord::Base
     delete_thumbnail
   end
 
-  #private
+  private
   def temp_filename
     Rails.root.join('tmp').to_s + '/' + filename
   end
