@@ -11,26 +11,45 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160202073925) do
+ActiveRecord::Schema.define(version: 20160203093456) do
 
   create_table "chapters", force: :cascade do |t|
-    t.integer  "movie_id",    null: false
-    t.integer  "offset",      null: false
+    t.integer  "movie_id",                        null: false
+    t.integer  "offset",                          null: false
     t.text     "description"
     t.date     "date"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.boolean  "thumbnail_ready", default: false
   end
 
   add_index "chapters", ["movie_id"], name: "index_chapters_on_movie_id"
 
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
+
   create_table "movies", force: :cascade do |t|
-    t.string   "filename",    null: false
+    t.string   "filename",                        null: false
     t.text     "description"
     t.datetime "start"
     t.datetime "end"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.boolean  "movie_ready",     default: false
+    t.boolean  "thumbnail_ready", default: false
   end
 
 end

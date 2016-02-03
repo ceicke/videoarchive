@@ -8,12 +8,15 @@
   - @movies.each do |movie|
     .item
       .image
-        = image_tag 'http://semantic-ui.com/images/wireframe/image.png'
+        - if movie.thumbnail_ready
+          = image_tag movie.thumbnail_public_url
+        - else
+          = image_tag 'http://semantic-ui.com/images/wireframe/image.png'
         .extra
-          = link_to movie do
-            .ui.label Öffnen
-          = link_to edit_movie_path(movie) do
-            .ui.label Bearbeiten
+          %ul
+            %li= link_to 'Öffnen', movie
+            %li= link_to 'Bearbeiten', edit_movie_path(movie)
+            %li= link_to 'Metadaten bearbeiten', edit_meta_movie_path(movie)
       .content
         .header
           = number_to_human_size movie.filesize

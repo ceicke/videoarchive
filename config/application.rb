@@ -24,5 +24,7 @@ module Videoarchive
     config.active_record.raise_in_transactional_callbacks = true
 
     config.fetch_directory = Rails.root.join('tmp', 'videos_to_fetch').to_s
+
+    config.active_job.queue_adapter = :delayed_job
   end
 end

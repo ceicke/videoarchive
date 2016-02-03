@@ -28,6 +28,10 @@ gem 'aws-sdk'
 # moment JS for date handling in JavaScript
 gem 'momentjs-rails'
 
+# job handling
+gem 'delayed_job_active_record'
+gem 'daemons'
+
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
@@ -48,6 +52,7 @@ gem 'capistrano-rails', group: :development
 gem 'capistrano-rvm', group: :development
 gem 'capistrano-bundler', group: :development
 gem 'capistrano-puma', group: :development
+gem 'capistrano3-delayed-job', group: :development
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

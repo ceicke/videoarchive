@@ -15,7 +15,7 @@ namespace :videos do
       m = Movie.new
       m.filename = movie_uuid
 
-      obj = s3.bucket(Rails.application.secrets.amazone_bucket_name).object(movie_uuid)
+      obj = s3.bucket(Rails.application.secrets.amazon_bucket_name).object(movie_uuid)
       obj.upload_file(file_name, acl: 'public-read', content_type: 'video/mp4')
 
       m.save

@@ -1,6 +1,9 @@
 .item.chapter{data: {offset: chapter.offset}}
   .ui.tiny.image
-    = image_tag 'http://semantic-ui.com/images/wireframe/image.png'
+    - if chapter.thumbnail_ready
+      = image_tag chapter.public_url
+    - else
+      = image_tag 'http://semantic-ui.com/images/wireframe/image.png'
   .ui.content
     .header
       .ui.label
