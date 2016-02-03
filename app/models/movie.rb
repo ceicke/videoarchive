@@ -6,7 +6,7 @@ class Movie < ActiveRecord::Base
 
   validates :filename, presence: true
 
-  after_commit :create_thumbnails
+  after_commit :create_thumbnails, on: :update
 
   def filesize
     aws_object.content_length
@@ -39,7 +39,7 @@ class Movie < ActiveRecord::Base
 
     system("montage -mode concatenate -geometry 600x -tile #{tiling} #{filelist} -auto-orient #{Rails.root.join('tmp').to_s + '/' + thumbnail_filename}")
 
-    aws_object.upload_file(Rails.root.join('tmp').to_s + '/' + thumbnail_filename, acl: 'public-read', content_type: 'image/jpg')
+    thumbnail_aws_object.upload_file(Rails.root.join('tmp').to_s + '/' + thumbnail_filename, acl: 'public-read', content_type: 'image/jpg')
     update_attribute(:thumbnail_ready, true)
   end
 
@@ -51,13 +51,13 @@ class Movie < ActiveRecord::Base
     delete_thumbnail
   end
 
-  private
+  #private
   def temp_filename
     Rails.root.join('tmp').to_s + '/' + filename
   end
 
   def thumbnail_filename
-    "thumbnail-#{filename}.jpg"
+    "#{filename}-thumbnail.jpg"
   end
 
   def aws_object

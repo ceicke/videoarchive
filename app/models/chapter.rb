@@ -18,7 +18,7 @@ class Chapter < ActiveRecord::Base
   end
 
   def thumbnail_filename
-    "chapter-#{id}.jpg"
+    "#{movie.filename}-chapter-#{id}.jpg"
   end
 
   private
