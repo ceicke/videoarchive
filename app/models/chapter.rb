@@ -2,7 +2,7 @@ class Chapter < ActiveRecord::Base
   belongs_to :movie
 
   def generate_thumbnail(movie_file)
-    system("avconv -ss #{offset} -t 1 -i #{movie_file} -f mjpeg #{Rails.root.join('tmp').to_s + '/' + thumbnail_filename}")
+    system("avconv -ss #{offset} -r 25 -t 1 -i #{movie_file} -frames 1 #{Rails.root.join('tmp').to_s + '/' + thumbnail_filename}")
   end
 
   def upload_thumbnail
