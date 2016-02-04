@@ -5,7 +5,17 @@
 
 %video.video-js.vjs-default-skin#player{controls: true, preload: 'auto', width: '640', height: '264'}
 
-%button.fluid.ui.blue.basic.button#mark
+.two.ui.buttons
+  %button.ui.left.labled.tiny.icon.basic.button.seek-backwards
+    %i.angle.double.left.icon
+    10s zurück
+  %button.ui.right.labled.tiny.icon.basic.button.seek-forward
+    10s vor
+    %i.angle.double.right.icon
+
+.ui.divider
+
+%button.fluid.ui.blue.button#mark
   Neuer Abschnitt
 
 #chapterarea
@@ -78,6 +88,16 @@
 
       resizeVideoJS()
       window.onresize = resizeVideoJS
+
+    $('.seek-backwards').on('click', () ->
+      currentTime = player.currentTime()
+      player.currentTime(currentTime - 10)
+    )
+
+    $('.seek-forward').on('click', () ->
+      currentTime = player.currentTime()
+      player.currentTime(currentTime + 10)
+    )
 
     $('#mark').on('click', () ->
       currentTime = player.currentTime()
