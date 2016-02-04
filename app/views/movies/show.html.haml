@@ -14,10 +14,14 @@
     player = null
     aspectRatio = 264/640
 
+    offset = "#{@offset}"
+
     videojs('player').ready () ->
       player = this
       player.src({ type: "#{@movie.content_type}", src: "#{@movie.public_url}" })
       player.poster("#{@movie.thumbnail_public_url}")
+      player.currentTime(offset)
+      player.play()
 
       resizeVideoJS = () ->
         width = document.getElementById('player').parentElement.offsetWidth

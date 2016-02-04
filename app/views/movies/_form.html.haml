@@ -1,4 +1,4 @@
-= form_for(@movie) do |f|
+= form_for @movie, html: { class: 'ui form' } do |f|
   - if @movie.errors.any?
     #error_explanation
       %h2
@@ -8,20 +8,24 @@
         - @movie.errors.full_messages.each do |message|
           %li= message
   .field
-    = f.label :description
-    %br/
-    = f.text_area :description
+    .label= f.label :description
+    = f.text_field :description
   .field
-    = f.label :start
-    %br/
-    = f.datetime_select :start
+    .label= f.label :start
+    = f.text_field :start, class: 'date-input'
   .field
-    = f.label :end
-    %br/
-    = f.datetime_select :end
-  .field
-    = f.label :movie_ready
-    %br/
+    .label= f.label :end
+    = f.text_field :end, class: 'date-input'
+  .inline.field
+    .ui.checkbox
     = f.check_box :movie_ready
-  .actions
-    = f.submit
+    .label= f.label :movie_ready
+  .ui.submit.button
+    = f.submit 'Speichern'
+
+:coffeescript
+  $('.date-input').dateRangePicker
+    singleDate: true,
+    startOfWeek: 'monday',
+    autoClose: true,
+    format: 'DD.MM.YYYY'

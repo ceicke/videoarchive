@@ -4,12 +4,17 @@ class MoviesController < ApplicationController
   # GET /movies
   # GET /movies.json
   def index
-    @movies = Movie.all
+    @movies = Movie.order(:start)
   end
 
   # GET /movies/1
   # GET /movies/1.json
   def show
+    if params[:offset].blank?
+      @offset = 0
+    else
+      @offset = params[:offset]
+    end
   end
 
   # GET /movies/new

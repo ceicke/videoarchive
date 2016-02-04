@@ -18,10 +18,15 @@
             %li= link_to 'Bearbeiten', edit_movie_path(movie)
             %li= link_to 'Metadaten bearbeiten', edit_meta_movie_path(movie)
       .content
-        .header
-          = number_to_human_size movie.filesize
+        - if movie.description.blank?
+          = link_to "#{number_to_human_size movie.filesize}", movie, class: 'ui header'
+        - else
+          = link_to movie.description, movie, class: 'ui header'
         .meta
-          = l movie.created_at
+          - if movie.movie_ready && movie.start && movie.end
+            = "Zeitraum: #{l movie.start, format: :onlydate} - #{l movie.end, format: :onlydate}"
+          - else
+            = "Hochgeladen: #{l movie.created_at}"
         .description
           .ui.list
             = render partial: 'small_chapter', collection: movie.chapters, as: :chapter

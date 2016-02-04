@@ -23,6 +23,7 @@
         %i.delete.icon
       .ui.green.icon.button.save-button
         %i.checkmark.icon
+      %i.save.icon
 
 :coffeescript
   $(document).ready () ->
@@ -48,6 +49,7 @@
           offset: offset,
           movie_id: movie_id
       ).done (data) ->
+        chapter.find('.save').hide()
         chapter.find('.mark-id-input').val(data['id'])
 
     updateMark = (id, description, date, offset) ->

@@ -2,6 +2,6 @@
   %i.folder.icon
   .ui.content
     .description
+      = link_to chapter.description, movie_path(chapter.movie, offset: chapter.offset)
       - if chapter.date.present?
         = "(#{l chapter.date})"
-      = chapter.description
