@@ -1,6 +1,12 @@
 class ChaptersController < ApplicationController
   before_action :set_chapter, only: [:update, :destroy]
-  before_action :set_movie, only: [:create, :update, :destroy]
+  before_action :set_movie, only: [:index, :create, :update, :destroy]
+
+  def index
+    respond_to do |format|
+      format.json { render json: @movie.chapters.to_json(methods: :public_url) }
+    end
+  end
 
   def create
     @chapter = Chapter.new(chapter_params)

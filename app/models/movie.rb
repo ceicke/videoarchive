@@ -8,6 +8,8 @@ class Movie < ActiveRecord::Base
 
   after_commit :create_thumbnails, on: :update
 
+  scope :finished, -> { where(movie_ready: true) }
+
   def filesize
     aws_object.content_length
   end

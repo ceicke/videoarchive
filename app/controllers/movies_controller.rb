@@ -1,10 +1,18 @@
 class MoviesController < ApplicationController
   before_action :set_movie, only: [:show, :edit, :update, :destroy, :edit_meta]
+  protect_from_forgery except: :index
 
   # GET /movies
   # GET /movies.json
   def index
     @movies = Movie.order(:start)
+
+    respond_to do |format|
+      format.html
+      format.js do
+        @movies = Movie.finished.order(:start)
+      end
+    end
   end
 
   # GET /movies/1

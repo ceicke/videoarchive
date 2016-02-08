@@ -1,0 +1,112 @@
+var Presenter = {
+  makeDocument: function(resource) {
+    if (!Presenter.parser) {
+      Presenter.parser = new DOMParser();
+    }
+    var doc = Presenter.parser.parseFromString(resource, "application/xml");
+    return doc;
+  },
+  modalDialogPresenter: function(xml) {
+    navigationDocument.presentModal(xml);
+  },
+  pushDocument: function(xml) {
+    navigationDocument.pushDocument(xml);
+  },
+  load: function(event) {
+    var self = this;
+    var elem = event.target;
+    var movieId = elem.getAttribute("movieId");
+    var movieURL = elem.getAttribute("movieURL")
+
+    var username = <%= Rails.application.secrets.app_username %>;
+    var password = <%= Rails.application.secrets.app_password %>;
+
+    if(movieURL) {
+      var player = new Player();
+      var playlist = new Playlist();
+      player.playlist = playlist;
+
+      var xmlhttp = new XMLHttpRequest()
+      var url = '<%= root_url %>movies/' + movieId + '/chapters.json'
+
+      xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          var chapters = JSON.parse(xmlhttp.responseText);
+
+          var mediaItem = new MediaItem();
+          mediaItem.url = movieURL;
+          mediaItem.type = 'movie';
+
+          var highlights = [];
+
+          var chapter_count = chapters.length;
+          for (var i = 0; i < chapter_count; i++) {
+
+            var highlight = {
+              name: chapters[i].description,
+              description: chapters[i].description,
+              starttime: chapters[i].offset,
+              imageURL: chapters[i].public_url,
+              duration: 30
+            }
+            highlights.push(highlight);
+          }
+
+          var highlightGroup = {
+            name: 'Chapters',
+            highlights: highlights
+          }
+          mediaItem.highlightGroups = [highlightGroup];
+          player.playlist.push(mediaItem);
+          player.present();
+        }
+      };
+      xmlhttp.open("GET", url, true);
+      xmlhttp.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
+      xmlhttp.send();
+
+    }
+  },
+}
+
+App.onLaunch = function(options) {
+
+  var menu = mainMenu("Familienvideos", "");
+  var doc = Presenter.makeDocument(menu);
+
+  doc.addEventListener("select", Presenter.load.bind(Presenter));
+  Presenter.pushDocument(doc);
+
+}
+
+var mainMenu = function(title, description) {
+  var mainMenuString = `<?xml version="1.0" encoding="UTF-8" ?>
+    <document>
+      <listTemplate>
+        <list>
+          <header>
+            <title>Familienvideos</title>
+          </header>
+          <section>
+            <% @movies.each do |m| %>
+              <listItemLockup movieId="<%= m.id %>" movieURL="<%= m.public_url %>">
+                <title><%= l m.start, format: :onlydate %> - <%= l m.end, format: :onlydate %></title>
+                <relatedContent>
+                  <lockup>
+                    <img src="<%= m.thumbnail_public_url %>" />
+                    <title>
+                      <%= l m.start, format: :onlydate %> - <%= l m.end, format: :onlydate %>
+                    </title>
+                    <description>
+                      <%= m.description %>
+                    </description>
+                  </lockup>
+                </relatedContent>
+              </listItemLockup>
+            <% end %>
+          </section>
+        </list>
+      </listTemplate>
+    </document>`
+    return mainMenuString
+}

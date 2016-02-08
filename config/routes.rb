@@ -3,7 +3,7 @@ Rails.application.routes.draw do
     member do
       get 'edit_meta'
     end
-    resources :chapters, only: [:create, :update, :destroy]
+    resources :chapters, only: [:index, :create, :update, :destroy]
   end
 
   root 'movies#index'
