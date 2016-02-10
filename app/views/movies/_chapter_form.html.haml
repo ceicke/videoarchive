@@ -3,7 +3,7 @@
   %input{type: 'hidden', name: 'offset', class: 'offset-input', value: "#{chapter.offset}"}
   .inline.fields
     .ten.wide.field
-      .ui.large.label.time 2:03
+      .ui.large.label.time= format_offset_seconds chapter.offset
       %input{type: 'text', placeholder: 'Was passiert?', name: 'description', class: 'description-input', value: "#{chapter.description}"}
     .six.wide.field
       %input{type: 'text', placeholder: 'Datum', name: 'date', class: 'date-input', value: "#{chapter.date}"}
