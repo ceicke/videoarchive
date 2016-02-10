@@ -121,8 +121,7 @@
     $('.delete-button').on('click', () ->
       chapter = $(this).parents('.chapter')
       markId = chapter.find('.mark-id-input').val()
-      if markId != '0'
-        deleteMark(markId)
+      deleteMark(markId, chapter)
       chapter.hide()
     )
 
