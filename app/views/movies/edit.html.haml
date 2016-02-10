@@ -131,6 +131,13 @@
       $(this).parents('.chapter').find('.save.icon').show()
     )
 
+    $('.label.time').on('click', () ->
+      chapter = $(this).parents('.chapter')
+      offset = chapter.find('.offset-input').val()
+      player.currentTime(offset)
+      player.play()
+    )
+
     $('#mark').on('click', () ->
       currentTime = player.currentTime()
       template = $('#template')
