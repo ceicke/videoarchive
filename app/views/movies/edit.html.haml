@@ -19,7 +19,7 @@
   Neuer Abschnitt
 
 #chapterarea
-  = render partial: 'chapter_form', collection: @movie.chapters, as: :chapter
+  = render partial: 'chapter_form', collection: @movie.chapters.order("created_at DESC"), as: :chapter
 
 .ui.form.chapter#template
   %input{type: 'hidden', name: 'mark-id', class: 'mark-id-input'}
