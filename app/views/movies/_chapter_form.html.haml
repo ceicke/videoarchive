@@ -1,0 +1,14 @@
+.ui.form.chapter
+  %input{type: 'hidden', name: 'mark-id', class: 'mark-id-input', value: "#{chapter.id}"}
+  %input{type: 'hidden', name: 'offset', class: 'offset-input', value: "#{chapter.offset}"}
+  .inline.fields
+    .ten.wide.field
+      .ui.large.label.time 2:03
+      %input{type: 'text', placeholder: 'Was passiert?', name: 'description', class: 'description-input', value: "#{chapter.description}"}
+    .six.wide.field
+      %input{type: 'text', placeholder: 'Datum', name: 'date', class: 'date-input', value: "#{chapter.date}"}
+      .ui.red.icon.button.delete-button
+        %i.delete.icon
+      .ui.green.icon.button.save-button
+        %i.checkmark.icon
+      %i.save.icon

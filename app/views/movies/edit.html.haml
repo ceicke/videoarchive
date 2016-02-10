@@ -19,6 +19,7 @@
   Neuer Abschnitt
 
 #chapterarea
+  = render partial: 'chapter_form', collection: @movie.chapters, as: :chapter
 
 .ui.form.chapter#template
   %input{type: 'hidden', name: 'mark-id', class: 'mark-id-input'}
@@ -52,6 +53,7 @@
       h + ':' + (if m < 10 then '0' + m else m) + ':' + (if s < 10 then '0' + s else s)
 
     saveMark = (description, date, offset, chapter) ->
+      chapter.find('.save-button').addClass('loading')
       $.post("/movies/#{@movie.id}/chapters.json",
         chapter:
           description: description,
@@ -61,8 +63,10 @@
       ).done (data) ->
         chapter.find('.save').hide()
         chapter.find('.mark-id-input').val(data['id'])
+        chapter.find('.save-button').removeClass('loading')
 
-    updateMark = (id, description, date, offset) ->
+    updateMark = (id, description, date, offset, chapter) ->
+      chapter.find('.save-button').addClass('loading')
       $.ajax(
         type: 'PATCH',
         url: "/movies/#{@movie.id}/chapters/" + id + ".json",
@@ -70,13 +74,17 @@
           chapter:
             description: description,
             date: date
-      )
+      ).done (data) ->
+        chapter.find('.save').hide()
+        chapter.find('.save-button').removeClass('loading')
 
-    deleteMark = (id) ->
+    deleteMark = (id, chapter) ->
+      chapter.find('.save-button').addClass('loading')
       $.ajax(
         type: 'DELETE',
         url: "/movies/#{@movie.id}/chapters/" + id + ".json"
-      )
+      ).done (data) ->
+        chapter.find('.save-button').removeClass('loading')
 
     videojs('player').ready () ->
       player = this
@@ -99,6 +107,31 @@
       player.currentTime(currentTime + 10)
     )
 
+    $('.save-button').on('click', () ->
+      chapter = $(this).parents('.chapter')
+      description = chapter.find('.description-input').val()
+      date = chapter.find('.date-input').val()
+      offset = chapter.find('.offset-input').val()
+      markId = chapter.find('.mark-id-input').val()
+      if markId == '0'
+        saveMark(description, date, offset, chapter)
+      else
+        updateMark(markId, description, date, offset, chapter)
+    )
+    $('.delete-button').on('click', () ->
+      chapter = $(this).parents('.chapter')
+      markId = chapter.find('.mark-id-input').val()
+      if markId != '0'
+        deleteMark(markId)
+      chapter.hide()
+    )
+
+    $('.chapter').find('.save.icon').hide()
+
+    $('.chapter').find('input').on('keydown', () ->
+      $(this).parents('.chapter').find('.save.icon').show()
+    )
+
     $('#mark').on('click', () ->
       currentTime = player.currentTime()
       template = $('#template')
@@ -108,6 +141,7 @@
       newChapter.find('.offset-input').val(Math.round(currentTime))
       newChapter.find('.mark-id-input').val('0')
       newChapter.find('.description-input').val('')
+      newChapter.find('.save.icon').show()
 
       newChapter.prependTo('#chapterarea').show()
       newChapter.find('.description-input').focus()
@@ -121,13 +155,13 @@
         if markId == '0'
           saveMark(description, date, offset, newChapter)
         else
-          updateMark(markId, description, date, offset)
+          updateMark(markId, description, date, offset, newChapter)
       )
       deleteButton = newChapter.find('.delete-button')
       deleteButton.on('click', () ->
         markId = newChapter.find('.mark-id-input').val()
         if markId != '0'
-          deleteMark(markId)
+          deleteMark(markId, newChapter)
         newChapter.hide()
       )
 
