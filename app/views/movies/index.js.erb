@@ -18,8 +18,8 @@ var Presenter = {
     var movieId = elem.getAttribute("movieId");
     var movieURL = elem.getAttribute("movieURL")
 
-    var username = <%= Rails.application.secrets.app_username %>;
-    var password = <%= Rails.application.secrets.app_password %>;
+    var username = "<%= Rails.application.secrets.app_username %>";
+    var password = "<%= Rails.application.secrets.app_password %>";
 
     if(movieURL) {
       var player = new Player();
