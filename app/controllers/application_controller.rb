@@ -9,6 +9,10 @@ class ApplicationController < ActionController::Base
   def basic_authentication
     return unless Rails.env.production?
 
+    if request.user_agent.starts_with?('videoarchive-tv')
+      return true
+    end
+
     authenticate_or_request_with_http_basic do |username, password|
       username == Rails.application.secrets.app_username && password == Rails.application.secrets.app_password
     end
