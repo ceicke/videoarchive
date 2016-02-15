@@ -39,7 +39,7 @@ class Movie < ActiveRecord::Base
     tiling = "#{Math.sqrt(chapters.count).ceil}x#{Math.sqrt(chapters.count).ceil}"
     filelist = Chapter.all.map { |c| Rails.root.join('tmp').to_s + '/' + c.thumbnail_filename }.join(' ')
 
-    system("montage -background 'rgba(0,0,0,0,0)' -mode concatenate -geometry 600x -tile #{tiling} #{filelist} -auto-orient #{Rails.root.join('tmp').to_s + '/' + thumbnail_filename}")
+    system("montage -background 'rgba(0, 0, 0, 0.0)' -mode concatenate -geometry 600x -tile #{tiling} #{filelist} -auto-orient #{Rails.root.join('tmp').to_s + '/' + thumbnail_filename}")
 
     thumbnail_aws_object.upload_file(Rails.root.join('tmp').to_s + '/' + thumbnail_filename, acl: 'public-read', content_type: 'image/jpg')
     update_column(:thumbnail_ready, true)
