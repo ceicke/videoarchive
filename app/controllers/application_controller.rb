@@ -7,9 +7,10 @@ class ApplicationController < ActionController::Base
 
   private
   def basic_authentication
+
     return unless Rails.env.production?
 
-    if request.user_agent.starts_with?('videoarchive-tv')
+    if request.user_agent.starts_with?('Videoarchiv')
       return true
     end
 
